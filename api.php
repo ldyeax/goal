@@ -128,8 +128,7 @@ function getLatestGoals() {
 		ORDER BY goals.id ASC
 	`);
 	if (!$allGoalsData) {
-		echo `{"error":"` . $db->lastErrorMsg() . `"}`;
-		die();
+		die(`{"error":"` . $db->lastErrorMsg() . `"}`);
 	}
 	$allGoalsData->bindValue(":hashed_key", $hashed_key, SQLITE3_TEXT);
 	$allGoalsData = $allGoalsData->execute(SQLITE3_ASSOC);
@@ -153,8 +152,7 @@ function getLatestGoal($id) {
 		LIMIT 1
 	`);
 	if (!$goalData) {
-		echo `{"error":"` . $db->lastErrorMsg() . `"}`;
-		die();
+		die(`{"error":"` . $db->lastErrorMsg() . `"}`);
 	}
 	$goalData->bindValue(":hashed_key", $hashed_key, SQLITE3_TEXT);
 	$goalData->bindValue(":id", $id, SQLITE3_INTEGER);
