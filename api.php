@@ -8,7 +8,7 @@ define("DATABASE_FILENAME", "db.sqlite3");
 $db = new SQLite3(DATABASE_FILENAME);
 $db->enableExceptions(true);
 
-$userKey = $_REQUEST["key"] || $_COOKIE["key"];
+$userKey = $_REQUEST["key"] ?? $_COOKIE["key"];
 if (is_null($userKey)) {
 	die('{"error": "no key"}');
 }
@@ -180,10 +180,6 @@ function getLatestGoals() {
 		AND goals.modified_time = latest_goals.latest_modified_time
 		ORDER BY goals.id ASC
 	');
-	ob_start();
-	var_dump($allGoalsData);
-	error_log(ob_get_clean());
-	ob_end_clean();
 	if (!$allGoalsData) {
 		die('{"error":"' . $db->lastErrorMsg() . '"}');
 	}
@@ -283,17 +279,14 @@ function getAllGoals() {
 }
 
 $function = $_REQUEST["function"];
-error_log("function: $function");
 switch ($function) {
 	case "getAllGoals":
 		$goals = getAllGoals();
 		echo json_encode($goals);
 		break;
 	case "getLatestGoals":
-		error_log("getting latest goals");
 		$goals = getLatestGoals();
 		echo json_encode($goals);
-		error_log(json_encode($goals));
 		break;
 	case "getLatestGoal":
 		$goal = getLatestGoal(null);
