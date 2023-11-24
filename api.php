@@ -113,6 +113,54 @@ class Goal {
 	}
 }
 
+
+
+
+
+$test1 = new Goal(null);
+$test1->id = 1;
+$test1->hashed_key = hash("sha256", "test");
+$test1->modified_time = time();
+$test1->name = "test1";
+$test1->type = GOAL_TYPE_PERCENTAGE;
+$test1->percentage = 0.5;
+$test1->notes = "test1 notes";
+$test1->write();
+
+$test2 = new Goal(null);
+$test2->id = 2;
+$test2->hashed_key = hash("sha256", "test");
+$test2->modified_time = time();
+$test2->name = "test2";
+$test2->type = GOAL_TYPE_BINARY;
+$test2->completed = 1;
+$test2->notes = "test2 notes";
+$test2->write();
+
+$test3 = new Goal(null);
+$test3->id = 3;
+$test3->hashed_key = hash("sha256", "test");
+$test3->modified_time = time();
+$test3->name = "test3";
+$test3->type = GOAL_TYPE_COMPOSITE;
+$test3->children = [1, 2];
+$test3->notes = "test3 notes";
+$test3->write();
+
+$test4 = new Goal(null);
+$test4->id = 4;
+$test4->hashed_key = hash("sha256", "test");
+$test4->modified_time = time();
+$test4->name = "test4";
+$test4->type = GOAL_TYPE_PERCENTAGE;
+$test4->percentage = 0.2;
+$test4->notes = "test4 notes";
+$test4->write();
+
+
+
+
+
 function getLatestGoals() {
 	global $db;
 	global $hashed_key;
@@ -231,6 +279,7 @@ function getAllGoals() {
 }
 
 $function = $_REQUEST["function"];
+error_log("function: $function");
 switch ($function) {
 	case "getAllGoals":
 		$goals = getAllGoals();
@@ -254,44 +303,5 @@ switch ($function) {
 		break;
 }
 
-$test1 = new Goal(null);
-$test1->id = 1;
-$test1->hashed_key = hash("sha256", "test");
-$test1->modified_time = time();
-$test1->name = "test1";
-$test1->type = GOAL_TYPE_PERCENTAGE;
-$test1->percentage = 0.5;
-$test1->notes = "test1 notes";
-$test1->write();
-
-$test2 = new Goal(null);
-$test2->id = 2;
-$test2->hashed_key = hash("sha256", "test");
-$test2->modified_time = time();
-$test2->name = "test2";
-$test2->type = GOAL_TYPE_BINARY;
-$test2->completed = 1;
-$test2->notes = "test2 notes";
-$test2->write();
-
-$test3 = new Goal(null);
-$test3->id = 3;
-$test3->hashed_key = hash("sha256", "test");
-$test3->modified_time = time();
-$test3->name = "test3";
-$test3->type = GOAL_TYPE_COMPOSITE;
-$test3->children = [1, 2];
-$test3->notes = "test3 notes";
-$test3->write();
-
-$test4 = new Goal(null);
-$test4->id = 4;
-$test4->hashed_key = hash("sha256", "test");
-$test4->modified_time = time();
-$test4->name = "test4";
-$test4->type = GOAL_TYPE_PERCENTAGE;
-$test4->percentage = 0.2;
-$test4->notes = "test4 notes";
-$test4->write();
 
 ?>
