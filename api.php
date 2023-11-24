@@ -10,7 +10,7 @@ $db->enableExceptions(true);
 
 $userKey = $_REQUEST["key"] || $_COOKIE["key"];
 if (is_null($userKey)) {
-	return "{}";
+	die(`{"error": "no key"}`);
 }
 $hashed_key = hash("sha256", $userKey);
 
