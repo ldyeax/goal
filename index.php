@@ -3,7 +3,6 @@
 <meta charset=utf-8>
 <link rel=stylesheet href=style.css>
 <title>Goals</title>
-<script src=vue.js></script>
 
 <?PHP
 if ($_COOKIE["key"]) {
@@ -37,6 +36,7 @@ window.initialData = <?PHP include("api.php?function=getLatestGoals"); ?>;
 <script type="module">
 import vGoal from './cmp-goal.js';
 import vLeaf from './cmp-leaf.js';
+import Vue from './vue.js';
 
 var app = new Vue({
 	el: '#app',
