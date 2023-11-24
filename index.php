@@ -36,10 +36,9 @@ window.initialData = <?PHP include("api.php?function=getLatestGoals"); ?>;
 <script type="module">
 import vGoal from './cmp-goal.js';
 import vLeaf from './cmp-leaf.js';
-import Vue from './vue.js';
+import { createApp, ref } from './vue.js';
 
-var app = new Vue({
-	el: '#app',
+createApp({
 	data: {
 		key:"",
 		display: 'tree',
@@ -97,6 +96,6 @@ var app = new Vue({
 		'cmp-goal': vGoal,
 		'cmp-leaf': vLeaf
 	}
-});
+}).mount("#app");
 
 </script>
