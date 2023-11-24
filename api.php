@@ -88,6 +88,7 @@ class Goal {
 			) VALUES (
 				:id,
 				:hashed_key,
+				modified_time,
 				:name,
 				:type,
 				:percentage,
