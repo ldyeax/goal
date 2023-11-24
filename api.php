@@ -76,8 +76,8 @@ class Goal {
 		global $db;
 		$goalData = $db->prepare("
 			INSERT INTO goals (
+				id,
 				hashed_key,
-				created_time,
 				modified_time,
 				name,
 				type,
@@ -86,8 +86,8 @@ class Goal {
 				children,
 				notes
 			) VALUES (
+				:id,
 				:hashed_key,
-				:modified_time,
 				:name,
 				:type,
 				:percentage,
@@ -96,6 +96,10 @@ class Goal {
 				:notes
 			)
 		");
+		if (!$goalData) {
+			die('{"error":"' . $db->lastErrorMsg() . '"}');
+		}
+		$goalData->bindValue(":id", $this->id, SQLITE3_INTEGER);
 		$goalData->bindValue(":hashed_key", $this->hashed_key, SQLITE3_TEXT);
 		$goalData->bindValue(":modified_time", $this->modified_time, SQLITE3_INTEGER);
 		$goalData->bindValue(":name", $this->name, SQLITE3_TEXT);
