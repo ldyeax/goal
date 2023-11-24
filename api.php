@@ -131,7 +131,7 @@ function getLatestGoals() {
 		die('{"error":"' . $db->lastErrorMsg() . '"}');
 	}
 	$allGoalsData->bindValue(":hashed_key", $hashed_key, SQLITE3_TEXT);
-	$allGoalsData = $allGoalsData->execute(SQLITE3_ASSOC);
+	$allGoalsData = $allGoalsData->execute();
 	$goals = array();
 	while ($goalData = $allGoalsData->fetchArray()) {
 		$goal = new Goal($goalData);
@@ -156,7 +156,7 @@ function getLatestGoal($id) {
 	}
 	$goalData->bindValue(":hashed_key", $hashed_key, SQLITE3_TEXT);
 	$goalData->bindValue(":id", $id, SQLITE3_INTEGER);
-	$goalData = $goalData->execute(SQLITE3_ASSOC);
+	$goalData = $goalData->execute();
 	return new Goal($goalData->fetchArray());
 }
 
@@ -216,7 +216,7 @@ function getAllGoals() {
 		"SELECT * FROM goals WHERE hashed_key = :hashed_key ORDER BY id ASC"
 	);
 	$allGoalsData->bindValue(":hashed_key", $hashed_key, SQLITE3_TEXT);
-	$allGoalsData = $allGoalsData->execute(SQLITE3_ASSOC);
+	$allGoalsData = $allGoalsData->execute();
 	$goals = array();
 	while ($goalData = $allGoalsData->fetchArray()) {
 		$goal = new Goal($goalData);
