@@ -34,20 +34,20 @@ define("GOAL_TYPE_BINARY", 2);
 define("GOAL_TYPE_COMPOSITE", 3);
 
 class Goal {
-	public int $id;
-	public string $hashed_key;
-	public int $modified_time;
-	public string $name;
-	public int $type;
+	public int $id = 0;
+	public string $hashed_key = "";
+	public int $modified_time = 0;
+	public string $name = "";
+	public int $type = 0;
 	
 	// for percentage
-	public float $percentage;
+	public float $percentage = 0;
 	// for binary
-	public int $completed;
+	public int $completed = 0;
 	// for composite
-	public array $children;
+	public array $children = [];
 
-	public string $notes;
+	public string $notes = "";
 
 	function __construct($goalData) {
 		if (is_null($goalData)) {
