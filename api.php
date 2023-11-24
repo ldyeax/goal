@@ -286,8 +286,10 @@ switch ($function) {
 		echo json_encode($goals);
 		break;
 	case "getLatestGoals":
+		error_log("getting latest goals");
 		$goals = getLatestGoals();
 		echo json_encode($goals);
+		error_log(json_encode($goals));
 		break;
 	case "getLatestGoal":
 		$goal = getLatestGoal(null);
