@@ -127,9 +127,10 @@ function getLatestGoals() {
 		AND goals.modified_time = latest_goals.latest_modified_time
 		ORDER BY goals.id ASC
 	`);
-	// show error
-
-
+	if (!$allGoalsData) {
+		echo `{"error":"` . $db->lastErrorMsg() . `"}`;
+		die();
+	}
 	$allGoalsData->bindValue(":hashed_key", $hashed_key, SQLITE3_TEXT);
 	$allGoalsData = $allGoalsData->execute(SQLITE3_ASSOC);
 	$goals = array();
