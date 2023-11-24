@@ -161,7 +161,7 @@ function getLatestGoal($id) {
 }
 
 function updateGoal() {
-	$goal = getLatestGoal();
+	$goal = getLatestGoal(null);
 
 	$vars = get_class_vars(get_class($goal));
 	$vars = array_keys($vars);
@@ -200,7 +200,7 @@ function createGoal() {
 	$goal->write();
 
 	if (isset($_REQUEST["parent_id"])) {
-		$parentGoal = getLatestGoal();
+		$parentGoal = getLatestGoal(null);
 		$parentGoal->children[] = $goal->id;
 		$parentGoal->modified_time = time();
 		$parentGoal->write();
@@ -236,7 +236,7 @@ switch ($function) {
 		echo json_encode($goals);
 		break;
 	case "getLatestGoal":
-		$goal = getLatestGoal();
+		$goal = getLatestGoal(null);
 		echo json_encode($goal);
 		break;
 	case "updateGoal":
