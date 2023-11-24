@@ -34,7 +34,7 @@ window.initialData = <?PHP include("api.php?function=getLatestGoals"); ?>;
 		</div>
 	</div>
 </div>
-<script>
+<script type="module">
 import vGoal from './cmp-goal.js';
 import vLeaf from './cmp-leaf.js';
 
