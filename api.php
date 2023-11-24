@@ -10,7 +10,7 @@ $db->enableExceptions(true);
 
 $userKey = $_REQUEST["key"] || $_COOKIE["key"];
 if (is_null($userKey)) {
-	die(`{"error": "no key"}`);
+	die('{"error": "no key"}');
 }
 $hashed_key = hash("sha256", $userKey);
 
@@ -111,7 +111,7 @@ class Goal {
 function getLatestGoals() {
 	global $db;
 	global $hashed_key;
-	$allGoalsData = $db->prepare(`
+	$allGoalsData = $db->prepare('
 		WITH latest_goals AS (
 			SELECT
 				id,
@@ -126,9 +126,9 @@ function getLatestGoals() {
 		ON goals.id = latest_goals.id
 		AND goals.modified_time = latest_goals.latest_modified_time
 		ORDER BY goals.id ASC
-	`);
+	');
 	if (!$allGoalsData) {
-		die(`{"error":"` . $db->lastErrorMsg() . `"}`);
+		die('{"error":"' . $db->lastErrorMsg() . '"}');
 	}
 	$allGoalsData->bindValue(":hashed_key", $hashed_key, SQLITE3_TEXT);
 	$allGoalsData = $allGoalsData->execute(SQLITE3_ASSOC);
@@ -143,16 +143,16 @@ function getLatestGoals() {
 function getLatestGoal($id) {
 	global $db;
 	global $hashed_key;
-	$goalData = $db->prepare(`
+	$goalData = $db->prepare('
 		SELECT *
 		FROM goals
 		WHERE hashed_key = :hashed_key
 		AND id = :id
 		ORDER BY modified_time DESC
 		LIMIT 1
-	`);
+	');
 	if (!$goalData) {
-		die(`{"error":"` . $db->lastErrorMsg() . `"}`);
+		die('{"error":"' . $db->lastErrorMsg() . '"}');
 	}
 	$goalData->bindValue(":hashed_key", $hashed_key, SQLITE3_TEXT);
 	$goalData->bindValue(":id", $id, SQLITE3_INTEGER);
@@ -241,11 +241,11 @@ switch ($function) {
 		break;
 	case "updateGoal":
 		updateGoal();
-		echo `{"success":true}`;
+		echo '{"success":true}';
 		break;
 	case "createGoal":
 		$id = createGoal();
-		echo `{"id":$id}`;
+		echo '{"id":$id}';
 		break;
 }
 
