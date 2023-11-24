@@ -36,14 +36,14 @@ window.initialData = <?PHP include("api.php?function=getLatestGoals"); ?>;
 <script type="module">
 import vGoal from './cmp-goal.js';
 import vLeaf from './cmp-leaf.js';
-import { createApp, ref } from './vue.js';
+import { createApp, ref, reactive } from './vue.js';
 
 createApp({
-	data: {
-		key:"",
-		display: 'tree',
-		latestGoals: {},
-		goalTree: []
+	setup() {
+		const key = ref("");
+		const display = ref("tree");
+		const latestGoals = reactive({});
+		const goalTree = reactive([]);
 	},
 	methods: {
 		getLatestGoals() {
