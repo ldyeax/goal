@@ -180,6 +180,10 @@ function getLatestGoals() {
 		AND goals.modified_time = latest_goals.latest_modified_time
 		ORDER BY goals.id ASC
 	');
+	ob_start();
+	var_dump($allGoalsData);
+	error_log(ob_get_clean());
+	ob_end_clean();
 	if (!$allGoalsData) {
 		die('{"error":"' . $db->lastErrorMsg() . '"}');
 	}
