@@ -127,7 +127,8 @@ function getLatestGoals() {
 		AND goals.modified_time = latest_goals.latest_modified_time
 		ORDER BY goals.id ASC
 	`);
-	// show pdo error
+	// show error
+
 
 	$allGoalsData->bindValue(":hashed_key", $hashed_key, SQLITE3_TEXT);
 	$allGoalsData = $allGoalsData->execute(SQLITE3_ASSOC);
@@ -150,6 +151,10 @@ function getLatestGoal($id) {
 		ORDER BY modified_time DESC
 		LIMIT 1
 	`);
+	if (!$goalData) {
+		echo `{"error":"` . $db->lastErrorMsg() . `"}`;
+		die();
+	}
 	$goalData->bindValue(":hashed_key", $hashed_key, SQLITE3_TEXT);
 	$goalData->bindValue(":id", $id, SQLITE3_INTEGER);
 	$goalData = $goalData->execute(SQLITE3_ASSOC);
