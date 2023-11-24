@@ -1,3 +1,5 @@
+<?PHP chdir(__DIR__); ?>
+
 <!doctype html>
 <html lang="en">
 <meta charset=utf-8>

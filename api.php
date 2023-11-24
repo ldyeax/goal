@@ -1,5 +1,7 @@
 <?php
 
+chdir(__DIR__);
+
 header("Content-Type: application/json");
 
 define("DATABASE_FILENAME", "db.sqlite3");
