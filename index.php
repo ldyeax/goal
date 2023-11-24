@@ -30,15 +30,13 @@ window.initialData = <?PHP include("api.php?function=getLatestGoals"); ?>;
 	</div>
 	<div id=main>
 		<div id=tree v-if="display=='tree'">
+			<cmp-leaf v-for="root in goalTree" :goal="root" :key="root.id"></cmp-leaf>
 		</div>
 	</div>
 </div>
 <script>
-import vGoal from './goal.vue';
-
-class GoalTreeLeaf {
-	@public id;
-}
+import vGoal from './cmp-goal.js';
+import vLeaf from './cmp-leaf.js';
 
 var app = new Vue({
 	el: '#app',
@@ -96,7 +94,8 @@ var app = new Vue({
 		}
 	},
 	components: {
-		'goal': vGoal,
+		'cmp-goal': vGoal,
+		'cmp-leaf': vLeaf
 	}
 });
 
