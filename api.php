@@ -6,6 +6,7 @@ header("Content-Type: application/json");
 
 define("DATABASE_FILENAME", "db.sqlite3");
 $db = new SQLite3(DATABASE_FILENAME);
+$db->enableExceptions(true);
 
 $userKey = $_REQUEST["key"] || $_COOKIE["key"];
 if (is_null($userKey)) {
@@ -126,6 +127,8 @@ function getLatestGoals() {
 		AND goals.modified_time = latest_goals.latest_modified_time
 		ORDER BY goals.id ASC
 	`);
+	// show pdo error
+
 	$allGoalsData->bindValue(":hashed_key", $hashed_key, SQLITE3_TEXT);
 	$allGoalsData = $allGoalsData->execute(SQLITE3_ASSOC);
 	$goals = array();
