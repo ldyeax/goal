@@ -40,6 +40,49 @@ function getCookie(name) {
 	if (parts.length === 2) return parts.pop().split(';').shift();
 }
 
+function getGetProgress(child) {
+	return () => {
+		console.log(`child.getProgress ${child.id} ${JSON.stringify(child)}`);
+		switch (child.goal.type) {
+			case GOAL_TYPE_PERCENTAGE:
+				console.log("percentage child")
+				if (!child.goal) {
+					console.error(`No goal in percentage child ${child.id}`);
+					return 0;
+				}
+				return child.goal.percentage;
+			case GOAL_TYPE_BINARY:
+				console.log("binary child");
+				if (!child.goal) {
+					console.error(`No goal in binary child ${child.id}`);
+					return 0;
+				}
+				return child.goal.completed ? 1 : 0;
+			case GOAL_TYPE_COMPOSITE:
+				console.log("composite child");
+				if (!child.goal) {
+					console.error(`No goal in composite child ${child.id}`);
+					return 0;
+				}
+				let totalWeight = 0;
+				let totalProgress = 0;
+				for (let grandChild of child.children) {
+					console.log(`grandchild ${JSON.stringify(grandChild)}`);
+					totalWeight += grandChild.weight;
+					totalProgress += grandChild.weight * grandChild.getProgress();
+				}
+				if (totalWeight <= 0) {
+					console.error(`Invalid total weight on goal ${child.goal.id}`);
+					return 0;
+				}
+				return totalProgress / totalWeight;
+			default:
+				console.error(`Invalid goal type ${child.goal.type} in child ${child.id}`);
+				return 0;
+		}
+	};
+}
+
 let app1 = createApp({
 	setup() {
 		const key = ref(getCookie("key") || "");
@@ -68,7 +111,9 @@ let app1 = createApp({
 			let allIDs = Object.keys(this.latestGoals);
 			let processed = [];
 			let recurse = (root) => {
+				root.getProgress ??= getGetProgress(root);
 				let goal = this.latestGoals[root.id];
+				root.goal ??= goal;
 				if (!goal.children) {
 					return;
 				}
@@ -92,28 +137,9 @@ let app1 = createApp({
 					// , weight:weight, goal: this.latestGoals[childID]
 
 					child.weight = weight;
-					child.goal = this.latestGoals[childID];
+					child.goal ??= this.latestGoals[childID];
 
-					child.getProgress = () => {
-						switch (this.goal.type) {
-							case GOAL_TYPE_PERCENTAGE:
-								return this.goal.percentage;
-							case GOAL_TYPE_BINARY:
-								return this.goal.completed ? 1 : 0;
-							case GOAL_TYPE_COMPOSITE:
-								let totalWeight = 0;
-								let totalProgress = 0;
-								for (let child of this.goal.children) {
-									totalWeight += child.weight;
-									totalProgress += child.weight * child.getProgress();
-								}
-								if (totalWeight <= 0) {
-									console.error(`Invalid total weight on goal ${this.goal.id}`);
-									return 0;
-								}
-								return totalProgress / totalWeight;
-						}
-					};
+					child.getProgress ??= getGetProgress(child);
 
 					root.children.push(child);
 					

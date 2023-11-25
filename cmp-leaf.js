@@ -5,17 +5,24 @@ export default {
 	setup(props) {
 		let app = props.app;
 		let leaf = props.leaf;
-		console.log(`rendering leaf ${JSON.stringify(leaf)}`);
+		//console.log(`rendering leaf ${JSON.stringify(leaf)}`);
 		let id = leaf.id;
-		return { id, app};
+		if (!leaf.getProgress) {
+			console.error("no getProgress function");
+		}
+		let progress = leaf.getProgress ? 
+			leaf.getProgress() : 0;
+		//console.log(`has progress ${progress}`);
+		return { id, app, progress};
 	},
 	components: {
 		"cmp-goal": vGoal
 	},
 	template: `
 		<div class="cmp-leaf">
+			progress={{progress}}
 			<div class="cmp-leaf--root">
-				<cmp-goal :app="app" :id="id"></cmp-goal>
+				<cmp-goal :app="app" :id="id" :progress="progress"></cmp-goal>
 			</div>
 			<div class="cmp-leaf--children">
 				<div v-for="child in leaf.children" style="border: 1px solid red; padding: 2px;">
