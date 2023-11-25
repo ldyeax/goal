@@ -1,4 +1,11 @@
 <?php
+set_error_handler(function(int $errno, string $errstr) {
+    if ((strpos($errstr, 'Undefined array key') === false) && (strpos($errstr, 'Undefined variable') === false)) {
+        return false;
+    } else {
+        return true;
+    }
+}, E_WARNING);
 
 chdir(__DIR__);
 
@@ -10,6 +17,7 @@ $db->enableExceptions(true);
 
 $userKey = $_REQUEST["key"] ?? $_COOKIE["key"];
 if (is_null($userKey)) {
+	error_log("no key");
 	die('{"error": "no key"}');
 }
 $hashed_key = hash("sha256", $userKey);
@@ -66,7 +74,7 @@ class Goal {
 				$this->completed = $goalData["completed"];
 				break;
 			case GOAL_TYPE_COMPOSITE:
-				$this->children = explode(",", $goalData["children"]);
+				$this->children = json_decode($goalData["children"]);
 				break;
 		}
 		$this->notes = $goalData["notes"];
@@ -107,7 +115,7 @@ class Goal {
 		$goalData->bindValue(":type", $this->type, SQLITE3_INTEGER);
 		$goalData->bindValue(":percentage", $this->percentage, SQLITE3_FLOAT);
 		$goalData->bindValue(":completed", $this->completed, SQLITE3_INTEGER);
-		$goalData->bindValue(":children", implode(",", $this->children), SQLITE3_TEXT);
+		$goalData->bindValue(":children", json_encode($this->children), SQLITE3_TEXT);
 		$goalData->bindValue(":notes", $this->notes, SQLITE3_TEXT);
 		$goalData->execute();
 	}
@@ -143,7 +151,7 @@ $test3->hashed_key = hash("sha256", "test");
 $test3->modified_time = time();
 $test3->name = "test3";
 $test3->type = GOAL_TYPE_COMPOSITE;
-$test3->children = [1, 2];
+$test3->children = ["1", 3, "2"];
 $test3->notes = "test3 notes";
 $test3->write();
 
@@ -253,8 +261,8 @@ function createGoal() {
 	$goal->write();
 
 	if (isset($_REQUEST["parent_id"])) {
-		$parentGoal = getLatestGoal(null);
-		$parentGoal->children[] = $goal->id;
+		$parentGoal = getLatestGoal($_REQUEST["parent_id"]);
+		$parentGoal->children[] = "$goal->id";
 		$parentGoal->modified_time = time();
 		$parentGoal->write();
 	}

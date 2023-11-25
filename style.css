@@ -1,5 +1,10 @@
 #app {
 	display: flex;
+	flex-direction: column;
+}
+
+#options {
+	display: flex;
 	flex-direction: row;
 }
 
@@ -10,4 +15,19 @@
 
 #main {
 	flex-grow: 1;
+}
+
+.cmp-leaf {
+	border: 1px solid blue;
+	padding: 5px;
+	margin: 5px;
+}
+
+#tree {
+	display: flex;
+	flex-direction: row;
+}
+
+.cmp-goal {
+	text-align: center;
 }

@@ -1,11 +1,14 @@
 export default {
+	props: ["app", "id"],
 	setup(props) {
-		this.goal = props.app.latestGoals[props.id];
+		let app = props.app;
+		let goal = app.latestGoals ?
+			props.app.latestGoals[props.id] : {};
+		let id = props.id;
+		return { goal, app, id };
 	},
 	template: `
-		<template>
-			<div class="cmp-goal">
-				<h1>{{ goal.name }}</h1>
-			</div>
-		</template>`
+		<div class="cmp-goal">
+			<h1>{{ goal?.name ?? "no goal in cmp-goal" }}</h1>
+		</div>`
 };
