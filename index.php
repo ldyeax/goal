@@ -42,24 +42,25 @@ function getCookie(name) {
 
 function getGetProgress(child) {
 	return () => {
-		console.log(`child.getProgress ${child.id} ${JSON.stringify(child)}`);
+		//console.log(`child.getProgress ${child.id} ${JSON.stringify(child)}`);
 		switch (child.goal.type) {
 			case GOAL_TYPE_PERCENTAGE:
-				console.log("percentage child")
+				//console.log("percentage child")
 				if (!child.goal) {
 					console.error(`No goal in percentage child ${child.id}`);
 					return 0;
 				}
+				//console.log(child.goal.percentage);
 				return child.goal.percentage;
 			case GOAL_TYPE_BINARY:
-				console.log("binary child");
+				//console.log("binary child");
 				if (!child.goal) {
 					console.error(`No goal in binary child ${child.id}`);
 					return 0;
 				}
 				return child.goal.completed ? 1 : 0;
 			case GOAL_TYPE_COMPOSITE:
-				console.log("composite child");
+				//console.log("composite child");
 				if (!child.goal) {
 					console.error(`No goal in composite child ${child.id}`);
 					return 0;
@@ -67,7 +68,7 @@ function getGetProgress(child) {
 				let totalWeight = 0;
 				let totalProgress = 0;
 				for (let grandChild of child.children) {
-					console.log(`grandchild ${JSON.stringify(grandChild)}`);
+					//console.log(`grandchild ${JSON.stringify(grandChild)}`);
 					totalWeight += grandChild.weight;
 					totalProgress += grandChild.weight * grandChild.getProgress();
 				}
@@ -89,7 +90,8 @@ let app1 = createApp({
 		const display = ref("tree");
 		const latestGoals = reactive({});
 		const goalTree = reactive([]);
-		return {key, display, latestGoals, goalTree};
+		let onUserChangedGoal = [];
+		return {key, display, latestGoals, goalTree, onUserChangedGoal};
 	},
 	computed: {
 		app() {
@@ -113,6 +115,7 @@ let app1 = createApp({
 			let recurse = (root) => {
 				root.getProgress ??= getGetProgress(root);
 				let goal = this.latestGoals[root.id];
+				goal.completed = !!goal.completed;
 				root.goal ??= goal;
 				if (!goal.children) {
 					return;
@@ -167,6 +170,13 @@ let app1 = createApp({
 		submitKey() {
 			document.cookie = "key=" + this.key;
 			this.getLatestGoals();
+		},
+		userChangedGoal(goal) {
+			this.buildTree();
+			for (let callback of this.onUserChangedGoal) {
+				callback(goal);
+			}
+			this.$forceUpdate();
 		}
 	},
 	components: {
@@ -180,6 +190,12 @@ let app1 = createApp({
 	watch: {
 		key: function(value) {
 			document.cookie = "key=" + this.key;
+		},
+		latestGoals: {
+			deep: true,
+			handler: function(newValue, oldValue) {
+				console.log("goals changed");
+			}
 		}
 	}
 });

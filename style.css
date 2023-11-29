@@ -1,6 +1,13 @@
+body, html {
+	height: 100%;
+	margin: 0;
+	padding: 0;
+}
+
 #app {
 	display: flex;
 	flex-direction: column;
+	height: 100%;
 }
 
 #options {
@@ -14,7 +21,10 @@
 }
 
 #main {
-	flex-grow: 1;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex: 1;
 }
 
 .cmp-leaf {
@@ -27,6 +37,11 @@
 #tree {
 	display: flex;
 	flex-direction: row;
+	flex: 1;
+	height: 100%;
+
+	justify-content: space-around;
+	align-items: center;
 }
 
 .cmp-goal {
